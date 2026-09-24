@@ -1,0 +1,45 @@
+name: Promote to Test/Prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        required: true
+        options:
+          - Test
+          - Prod
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    # GitHub Environment protection rules (required reviewers) gate this job.
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Deploy to ${{ inputs.environment }}
+        env:
+          FABRIC_ENVIRONMENT: ${{ inputs.environment }}
+          FABRIC_WORKSPACE_ID: ${{ vars.FABRIC_WORKSPACE_ID }}
+          FABRIC_REPO_DIR: workspace
+        run: python deploy/deploy.py

@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+
+# Fabric / local
+.fabric/
+*.pbi.local
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

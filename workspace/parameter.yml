@@ -1,0 +1,20 @@
+# fabric-cicd parameterization
+# Docs: https://microsoft.github.io/fabric-cicd/latest/how_to/parameterization/
+#
+# Swaps environment-specific values when publishing item definitions.
+# The `environment` passed to FabricWorkspace (Dev/Test/Prod) selects the replace_value.
+
+find_replace:
+  # Rebind the Dev workspace ID embedded in item definitions to the target workspace.
+  - find_value: "d671b9e3-a688-4011-bc80-37aff6f7b856"
+    replace_value:
+      Dev: "d671b9e3-a688-4011-bc80-37aff6f7b856"
+      Test: "REPLACE_WITH_TEST_WORKSPACE_ID"
+      Prod: "REPLACE_WITH_PROD_WORKSPACE_ID"
+
+  # Example: rebind a data source / connection GUID referenced by the app.
+  # - find_value: "REPLACE_WITH_DEV_CONNECTION_ID"
+  #   replace_value:
+  #     Dev: "REPLACE_WITH_DEV_CONNECTION_ID"
+  #     Test: "REPLACE_WITH_TEST_CONNECTION_ID"
+  #     Prod: "REPLACE_WITH_PROD_CONNECTION_ID"

@@ -1,0 +1,19 @@
+# Reference mapping of SDLC stages to Fabric workspaces.
+# The pipeline reads FABRIC_WORKSPACE_ID from each GitHub Environment; this file
+# documents the intended topology for humans.
+
+tenant_id: "62c0cb46-1fcc-4c79-ba1b-d7d9fdfbaa68"
+
+environments:
+  Dev:
+    workspace_id: "d671b9e3-a688-4011-bc80-37aff6f7b856"
+    github_environment: "dev"
+    auto_deploy: true
+  Test:
+    workspace_id: "REPLACE_WITH_TEST_WORKSPACE_ID"
+    github_environment: "Test"
+    auto_deploy: false   # requires approval
+  Prod:
+    workspace_id: "REPLACE_WITH_PROD_WORKSPACE_ID"
+    github_environment: "Prod"
+    auto_deploy: false   # requires approval
