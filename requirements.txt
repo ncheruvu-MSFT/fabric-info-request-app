@@ -1,2 +1,2 @@
-fabric-cicd>=0.1.14
+fabric-cicd>=1.3.0
 azure-identity>=1.17.0

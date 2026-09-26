@@ -3,6 +3,13 @@
 Used by GitHub Actions. Authentication is handled by DefaultAzureCredential,
 which picks up the Azure CLI login performed by azure/login (GitHub OIDC).
 
+Requires fabric-cicd >= 1.3.0. New capabilities you can opt into:
+  - Bulk publish (single API call) for faster deploys.
+  - Dynamic replacement variables in parameter.yml (e.g. $sqlendpoint,
+    $workspace.$name) and case-insensitive find_replace.
+  - Private-link workspaces via configure_fabric_fqdn.
+  - FABRIC_CICD_RETRY_API_MAX_DURATION_SECONDS to tune long-running polling.
+
 Env vars:
   FABRIC_WORKSPACE_ID  target workspace GUID
   FABRIC_ENVIRONMENT   Dev | Test | Prod  (selects parameter.yml replace values)
@@ -18,16 +25,23 @@ from fabric_cicd import (
     unpublish_all_orphan_items,
 )
 
-# Item types to manage. Extend as the app grows (Notebook, DataPipeline, etc.).
-# NOTE: "App" (Fabric App / Info Request App) — confirm fabric-cicd support before
-# relying on automated promotion. See README "Fabric App CI/CD caveat".
+# Item types managed by fabric-cicd for this solution.
+# These are all in fabric-cicd's supported item list (v1.3.0):
+# https://microsoft.github.io/fabric-cicd/latest/  -> Supported Item Types
+#
+# NOTE: the Fabric "App" (Info Request App / Rayfin) item is NOT yet in the
+# fabric-cicd supported list, because it does not yet expose the public
+# create/update + source-control APIs fabric-cicd requires. Source-control the
+# App via Git integration now; promote it with Git-based deployment pipelines /
+# REST API until fabric-cicd adds coverage. See docs/sdlc.md.
 DEFAULT_ITEM_TYPES = [
     "VariableLibrary",
     "Notebook",
     "DataPipeline",
     "SemanticModel",
     "Report",
-    # "App",
+    "DataAgent",   # supported since fabric-cicd added Data Agent items
+    # "App",       # not yet supported by fabric-cicd (see note above)
 ]
 
 
